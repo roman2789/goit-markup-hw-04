@@ -52,6 +52,7 @@ p {
 .header .container {
   display: flex;
   justify-content: space-between;
+  height: 100%;
 }
 .header-logo {
   margin-right: 93px;
@@ -80,10 +81,18 @@ p {
 .header-list {
   display: flex;
   align-items: center;
+  height: 100%;
+}
+.header .item {
+  display: flex;
+  align-self: center;
+  position: relative;
+  height: 100%;
 }
 .header .item:not(:last-child) {
   margin-right: 50px;
 }
+
 .header .contacts {
   margin-right: 0;
   padding-left: 0;
@@ -91,13 +100,31 @@ p {
   align-items: center;
 }
 .header-list .link {
-  display: block;
+  display: flex;
+  align-items: center;
   font-size: 14px;
   line-height: 1.14;
   letter-spacing: 0.02em;
   font-weight: 500;
   color: var(--title-text-color);
   text-decoration: none;
+  transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.header-list .link::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  bottom: -1px;
+
+  width: 100%;
+  height: 4px;
+  background: var(--accent-color);
+  border-radius: 2px;
+  opacity: 0;
+}
+
+.header-list .link.current::after {
+  opacity: 1;
 }
 
 .contacts .link {
@@ -110,6 +137,7 @@ p {
   font-weight: 500;
   color: #757575;
   text-decoration: none;
+  transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .header-list .link:hover,
 .header-list .link:focus,
@@ -118,6 +146,7 @@ p {
 .contacts .link:focus {
   color: var(--accent-color);
 }
+
 .header-contacts-icon {
   fill: currentColor;
   margin-right: 10px;
@@ -232,8 +261,29 @@ p {
   display: flex;
   justify-content: space-between;
   margin-top: 50px;
+  line-height: 0;
 }
 
+.services .item {
+  display: inline-block;
+  position: relative;
+}
+.services-descr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 70px;
+  background: rgba(47, 48, 58, 0.8);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.14;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--primary-white-color);
+}
 /* team */
 
 .team {
@@ -305,18 +355,21 @@ p {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: transparent;
+  background-color: transparent;
   color: #afb1b8;
+  transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .team-socials-link:hover,
 .team-socials-link:focus {
-  background: var(--accent-color);
+  background-color: var(--accent-color);
   color: var(--primary-white-color);
 }
 
 .team-socials-icon {
   fill: currentColor;
 }
+
 /* clients */
 
 .clients {
@@ -348,6 +401,8 @@ p {
   background-color: var(--primary-white-color);
   border: 1px solid #afb1b8;
   border-radius: 4px;
+  transition: border-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .clients .link:hover,
@@ -388,6 +443,7 @@ p {
   line-height: 1.71;
   letter-spacing: 0.03em;
   color: var(--primary-white-color);
+  transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .address .footer-link {
   display: block;
@@ -442,16 +498,63 @@ p {
   align-items: center;
   width: 44px;
   height: 44px;
-  background: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .footer .socials-link:hover,
 .footer .socials-link:focus {
-  background: var(--accent-color);
+  background-color: var(--accent-color);
 }
 .footer .socials-icon {
   fill: #ffffff;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  opacity: 1;
+  transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.backdrop.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.backdrop.is-hidden .modal {
+  opacity: 0;
+  transform: translate(-50%, -50%) perspective(100px) scale(0.1) rotateX(180deg);
+  transition: transform 2000ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  min-width: 528px;
+  min-height: 581px;
+  background: #fff;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
+    0px 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  opacity: 1;
+  transform: translate(-50%, -50%) perspective(100px) scale(1) rotateX(360deg);
+  transition: transform 700ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 700ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.modal-close {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 30px;
+  height: 30px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
 }
 /* portfolio page */
 
@@ -462,6 +565,7 @@ p {
 .projects-tabs {
   display: flex;
   justify-content: center;
+
   padding-left: 0;
   margin-top: 0;
   margin-bottom: 0;
@@ -486,6 +590,8 @@ p {
   letter-spacing: 0.03em;
   background: #f5f4fa;
   cursor: pointer;
+  transition: box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 250ms cubic-bezier(0.4, 0, 0.2, 1), background 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .projects-button:hover,
 .projects-button:focus,
@@ -495,9 +601,7 @@ p {
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
     0px 3px 2px rgba(0, 0, 0, 0.2);
 }
-.project-pic {
-  display: block;
-}
+
 .projects-list {
   display: flex;
   flex-wrap: wrap;
@@ -509,15 +613,43 @@ p {
 .projects .project-item:nth-child(-n + 6) {
   margin-bottom: 30px;
 }
-
+.project-item {
+  transition: box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
 .projects-list .item:not(:nth-child(3n)) {
   margin-right: 30px;
+}
+.projects .overlay-block {
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .projects .item-border {
   border: 1px solid #eeeeee;
   border-top: none;
   padding: 20px 24px;
+}
+
+.projects .overlay {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  padding: 63px 24px;
+  width: 100%;
+  height: 100%;
+  background: rgba(33, 150, 243, 0.9);
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.56;
+  letter-spacing: 0.03em;
+  color: #ffffff;
+}
+
+.projects-list {
+  line-height: 0;
 }
 .projects-list .title {
   margin-top: 0;
@@ -540,4 +672,11 @@ p {
 .project-item:hover {
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
     0px 3px 2px rgba(0, 0, 0, 0.2);
+}
+
+.project-item:hover .overlay {
+  transform: translateY(-100%);
+}
+.project-item:hover .overlay-block {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
